@@ -27,6 +27,6 @@ urlpatterns = [
     path('api/auth/login/', MiTokenPersonalizadoView.as_view(), name='token_obtain_pair'), # Devuelve el Token
     path('api/auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'), # Refresca el Token
     
-    # Rutas de tu CRUD Logístico 
+    
     path('api/logistica/', include('envios.urls')), 
 ]
