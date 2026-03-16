@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // URL base de tu backend en Django
-const API_URL = "http://127.0.0.1:8000/api";
+const API_URL = "http://logistica.canadacentral.cloudapp.azure.com:8000/api";
 
 // Creamos la instancia principal de Axios
 const apiClient = axios.create({
