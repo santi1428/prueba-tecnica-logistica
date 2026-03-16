@@ -46,10 +46,9 @@ class Puerto(models.Model):
     def __str__(self):
         return self.nombre
 
-# 1. Nueva tabla para gestionar los tipos de productos
 class TipoProducto(models.Model):
     nombre = models.CharField(max_length=100, unique=True)
-    descripcion = models.TextField(blank=True, null=True) # Opcional pero recomendado
+    descripcion = models.TextField(blank=True, null=True) 
     
     class Meta:
         db_table = 'tipo_producto'

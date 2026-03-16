@@ -11,10 +11,9 @@ const Puertos: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
-  // Estado inicial actualizado con "pais"
   const [formData, setFormData] = useState<Partial<Puerto>>({
     nombre: "",
-    pais: "", // <--- CAMBIADO
+    pais: "",
   });
 
   useEffect(() => {
@@ -37,7 +36,7 @@ const Puertos: React.FC = () => {
   const handleOpenCreate = () => {
     setFormData({
       nombre: "",
-      pais: "", // <--- CAMBIADO
+      pais: "",
     });
     setIsEditing(false);
     setIsModalOpen(true);
@@ -54,10 +53,9 @@ const Puertos: React.FC = () => {
     setIsLoading(true);
     setErrorMsg("");
 
-    // Payload actualizado con "pais"
     const payload = {
       nombre: formData.nombre,
-      pais: formData.pais, // <--- CAMBIADO
+      pais: formData.pais,
     };
 
     try {
@@ -235,7 +233,7 @@ const Puertos: React.FC = () => {
                     value={formData.pais || ""}
                     onChange={(e) =>
                       setFormData({ ...formData, pais: e.target.value })
-                    } // <--- CAMBIADO
+                    }
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
                     placeholder="Ej. Colombia"
                   />

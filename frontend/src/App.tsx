@@ -7,13 +7,12 @@ import {
   Outlet,
 } from "react-router-dom";
 
-// Importación de Componentes
 import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
-import ProtectedRoute from "./components/ProtectedRoute"; // <-- IMPORTA ESTO
-import Login from "./pages/Login"; // Asegúrate de importar el real
+import ProtectedRoute from "./components/ProtectedRoute";
+import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Envios from "./pages/Envios"; // Asegúrate de importar el real
+import Envios from "./pages/Envios";
 import Clientes from "./pages/Clientes";
 import Productos from "./pages/Productos";
 import Bodegas from "./pages/Bodegas";

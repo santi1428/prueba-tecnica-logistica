@@ -33,7 +33,7 @@ class EnvioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Envio
         fields = '__all__'
-        read_only_fields = ('precio_final', 'numero_guia') # Se autogeneran o calculan en el backend
+        read_only_fields = ('precio_final', 'numero_guia')
 
     # REGLAS DE NEGOCIO: Validaciones de Placas y Flotas
     def validate(self, data):
@@ -76,13 +76,13 @@ class EnvioSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data['precio_final'] = self._calcular_precio_final(validated_data)
-        # Aquí puedes agregar la lógica para autogenerar el número de guía de 10 dígitos aleatorio
+
         import string, random
         validated_data['numero_guia'] = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
         return super().create(validated_data)
 
     def update(self, instance, validated_data):
-        # Recalcular precio si los valores cambian en la actualización
+
         datos_completos = {**serializers.ModelSerializer.to_representation(self, instance), **validated_data}
         validated_data['precio_final'] = self._calcular_precio_final(datos_completos)
         return super().update(instance, validated_data)

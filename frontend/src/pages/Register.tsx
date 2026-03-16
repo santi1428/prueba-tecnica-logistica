@@ -18,7 +18,6 @@ const Register: React.FC = () => {
   const handleRegister = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    // Validaciones básicas de frontend en español
     if (!username || !email || !password) {
       setErrorMsg("Por favor, completa todos los campos.");
       return;
@@ -40,11 +39,9 @@ const Register: React.FC = () => {
       navigate("/login");
     } catch (error: any) {
       if (error.response && error.response.data) {
-        // Muestra el error específico de Django traducido o adaptado
         const djangoError = Object.values(error.response.data)[0] as string[];
         let mensaje = djangoError[0];
 
-        // Traducciones comunes de Django (Opcional, por si tu backend está en inglés)
         if (mensaje.includes("already exists"))
           mensaje = "Este nombre de usuario ya está en uso.";
         if (mensaje.includes("valid email"))
