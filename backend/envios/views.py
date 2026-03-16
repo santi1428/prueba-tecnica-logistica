@@ -1,9 +1,9 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
-from .models import TipoProducto, Envio, Cliente, Puerto, Bodega
+from .models import TipoProducto, Envio, Cliente, Puerto, Bodega, TipoDocumento
 from .serializers import (
     TipoProductoSerializer, ClienteSerializer, PuertoSerializer, 
-    BodegaSerializer, EnvioSerializer
+    BodegaSerializer, EnvioSerializer, TipoDocumentoSerializer
 )
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import AllowAny
@@ -39,6 +39,10 @@ class EnvioViewSet(viewsets.ModelViewSet):
     serializer_class = EnvioSerializer
     permission_classes = [IsAuthenticated]
 
+class TipoDocumentoViewSet(viewsets.ModelViewSet):
+    queryset = TipoDocumento.objects.all()
+    serializer_class = TipoDocumentoSerializer
+    permission_classes = [IsAuthenticated]
 
 class RegistroUsuarioView(CreateAPIView):
     queryset = User.objects.all()
@@ -66,3 +70,13 @@ class RegistroUsuarioView(CreateAPIView):
         
         # 5. Retornamos la respuesta con el código HTTP 201 (Created)
         return Response(respuesta_personalizada, status=status.HTTP_201_CREATED)
+    
+    
+# Importa la vista base de JWT
+from rest_framework_simplejwt.views import TokenObtainPairView
+# Importa tu serializador personalizado (asegúrate de que esté en serializers.py)
+from .serializers import MiTokenPersonalizado
+
+# Crea una nueva clase View que usa tu serializador
+class MiTokenPersonalizadoView(TokenObtainPairView):
+    serializer_class = MiTokenPersonalizado

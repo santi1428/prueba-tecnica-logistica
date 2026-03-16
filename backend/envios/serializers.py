@@ -23,6 +23,11 @@ class BodegaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bodega
         fields = '__all__'
+        
+class TipoDocumentoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TipoDocumento
+        fields = '__all__'
 
 class EnvioSerializer(serializers.ModelSerializer):
     class Meta:
@@ -99,3 +104,16 @@ class RegistroUsuarioSerializer(serializers.ModelSerializer):
         
         #
         return user
+    
+    
+    # envios/serializers.py
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+
+class MiTokenPersonalizado(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        # Agregamos el nombre de usuario al payload del token
+        token['username'] = user.username 
+        return token

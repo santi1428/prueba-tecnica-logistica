@@ -18,14 +18,13 @@ from django.contrib import admin
 from django.urls import path, include
 
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from envios.views import RegistroUsuarioView
-
+from envios.views import RegistroUsuarioView, MiTokenPersonalizadoView
 urlpatterns = [
     path('admin/', admin.site.urls),
     
         # Rutas de Autenticación
     path('api/auth/registro/', RegistroUsuarioView.as_view(), name='registro_usuario'),
-    path('api/auth/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'), # Devuelve el Token
+    path('api/auth/login/', MiTokenPersonalizadoView.as_view(), name='token_obtain_pair'), # Devuelve el Token
     path('api/auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'), # Refresca el Token
     
     # Rutas de tu CRUD Logístico (Tu archivo urls.py de la app envios)
