@@ -1,10 +1,14 @@
 # ETAPA 1: Construcción (Build)
-FROM node:18-alpine as builder
+# ACTUALIZADO: Se requiere Node 20 o superior para Vite 8
+FROM node:22-alpine as builder 
 WORKDIR /app
 COPY package*.json ./
+
+# Ignora los conflictos estrictos de dependencias
 RUN npm install --legacy-peer-deps
+
 COPY . .
-# Se asume que usas vite, esto creará la carpeta /dist
+# Compilar el proyecto React
 RUN npm run build
 
 # ETAPA 2: Producción (Nginx)
