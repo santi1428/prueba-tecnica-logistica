@@ -93,7 +93,7 @@ DATABASES = {
         'NAME': 'logistics_db',
         'USER': 'admin',
         'PASSWORD': '123456',
-        'HOST': 'localhost',
+        'HOST': 'db',
         'PORT': '5432',
     }
 }
