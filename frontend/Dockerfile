@@ -2,7 +2,7 @@
 FROM node:18-alpine as builder
 WORKDIR /app
 COPY package*.json ./
-RUN npm install
+RUN npm install --legacy-peer-deps
 COPY . .
 # Se asume que usas vite, esto creará la carpeta /dist
 RUN npm run build
