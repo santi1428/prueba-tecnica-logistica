@@ -26,5 +26,37 @@ services:
     depends_on:
       - db
 
+  # --- NUEVO: SERVICIO BACKEND (DJANGO) ---
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: logistics_backend
+    restart: always
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgres://admin:123456@db:5432/logistics_db
+      - DEBUG=True
+    depends_on:
+      - db
+
+  # --- NUEVO: SERVICIO FRONTEND (REACT + NGINX) ---
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: logistics_frontend
+    restart: always
+    ports:
+      - "80:80" # Expone React en el puerto por defecto de HTTP
+    depends_on:
+      - backend
+
 volumes:
   postgres_data:
