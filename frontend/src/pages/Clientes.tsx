@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Users, Plus, Edit, Trash2, X, AlertCircle } from "lucide-react";
 import { api } from "../api/endpoint";
-// Importar los tipos actualizados
 import type { Cliente, TipoDocumento } from "../interfaces/model";
 
 const Clientes: React.FC = () => {
   const [clientes, setClientes] = useState<Cliente[]>([]);
-  // NUEVO ESTADO: Guardar tipos de documento
   const [tiposDocumento, setTiposDocumento] = useState<TipoDocumento[]>([]);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -19,13 +17,12 @@ const Clientes: React.FC = () => {
   const [formData, setFormData] = useState<Partial<Cliente>>({
     nombre: "",
     documento: "",
-    tipo_documento: 0, // <--- 0 para forzar selección
+    tipo_documento: 0,
     correo_electronico: "",
     telefono: "",
     direccion: "",
   });
 
-  // Cargar clientes y tipos de documento al mismo tiempo
   useEffect(() => {
     fetchData();
   }, []);
@@ -36,7 +33,7 @@ const Clientes: React.FC = () => {
       // Promise.all para cargar todo paralelo
       const [resClientes, resTiposDoc] = await Promise.all([
         api.clientes.getAll(),
-        api.tiposDocumento.getAll(), // <--- Llamada a la API de Django
+        api.tiposDocumento.getAll(),
       ]);
       setClientes(resClientes.data);
       setTiposDocumento(resTiposDoc.data);
@@ -263,8 +260,6 @@ const Clientes: React.FC = () => {
                     placeholder="Ej. Logística Global S.A."
                   />
                 </div>
-
-                {/* NUEVO: SELECT TIPO DE DOCUMENTO */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Tipo de Documento *
@@ -309,7 +304,6 @@ const Clientes: React.FC = () => {
                   />
                 </div>
 
-                {/* Resto del formulario... */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Teléfono

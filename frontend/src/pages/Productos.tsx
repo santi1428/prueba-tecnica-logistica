@@ -202,7 +202,6 @@ const Productos: React.FC = () => {
         </div>
       </div>
 
-      {/* Modal CRUD (Fondo opaco sin blur) */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
           <div className="bg-white rounded-xl shadow-lg w-full max-w-md max-h-[90vh] overflow-y-auto">

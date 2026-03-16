@@ -46,7 +46,7 @@ const Navbar: React.FC = () => {
   const handleClearSearch = () => {
     setSearchTerm("");
     // Redirige a la página actual pero sin los parámetros de búsqueda (?q=...)
-    // Esto resetea la tabla automáticamente si estabas en /envios
+
     navigate(location.pathname);
   };
 

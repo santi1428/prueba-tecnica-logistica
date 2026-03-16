@@ -1,5 +1,3 @@
-// src/interfaces/model.ts
-
 export interface TipoDocumento {
   id: number;
   nombre: string;
@@ -51,7 +49,6 @@ export interface Envio {
   puerto_entrega: number | null;
 }
 
-// Payload para registro de usuarios (Opcional si prefieres dejarlo en endpoint.ts)
 export interface RegisterPayload {
   username: string;
   email: string;

@@ -1,6 +1,5 @@
 import apiClient from "./axiosConfig";
 
-// Opcional: Define las interfaces (Types) para asegurar que envíes la data correcta
 export interface LoginPayload {
   username: string;
   password?: string;
@@ -80,8 +79,7 @@ export const api = {
       apiClient.patch(`/logistica/puertos/${id}/`, data),
   },
 
-  // En src/api/endpoint.ts, dentro de tu export const api = { ... }
   tiposDocumento: {
-    getAll: () => apiClient.get("/logistica/tipos-documento/"), // Ajusta la URL a la que tengas en tu Django (urls.py)
+    getAll: () => apiClient.get("/logistica/tipos-documento/"),
   },
 };

@@ -48,7 +48,6 @@ const Envios: React.FC = () => {
     puerto_entrega: 0,
   });
 
-  // --- CARGAR TODOS LOS DATOS AL INICIO ---
   useEffect(() => {
     fetchData();
   }, []);
@@ -70,7 +69,7 @@ const Envios: React.FC = () => {
         api.productos.getAll(),
         api.bodegas.getAll(),
         api.puertos.getAll(),
-        api.tiposDocumento.getAll(), // <-- LLAMADA A LA API
+        api.tiposDocumento.getAll(),
       ]);
       setEnvios(resEnvios.data);
       setClientes(resClientes.data);
@@ -89,25 +88,18 @@ const Envios: React.FC = () => {
   const enviosFiltrados = envios.filter((envio) => {
     if (!query) return true; // Si no hay búsqueda, muestra todos
 
-    // A. ¿Coincide con el número de guía?
     const matchGuia = envio.numero_guia.toLowerCase().includes(query);
 
-    // B. Buscar los datos del cliente asociado a este envío
     const clienteObj = clientes.find((c) => c.id === envio.cliente);
 
-    // C. ¿Coincide con el nombre del cliente?
     const matchNombreCliente =
       clienteObj?.nombre.toLowerCase().includes(query) || false;
 
-    // D. ¿Coincide con el documento del cliente?
     const matchDocCliente =
       clienteObj?.documento.toLowerCase().includes(query) || false;
 
-    // Retorna true si CUALQUIERA de las condiciones se cumple
     return matchGuia || matchNombreCliente || matchDocCliente;
   });
-
-  // --- FUNCIONES AUXILIARES PARA MOSTRAR TEXTOS EN LA TABLA EN LUGAR DE IDs ---
 
   const getNombreCliente = (clienteId: number) => {
     const cliente = clientes.find((c) => c.id === clienteId);
@@ -141,8 +133,6 @@ const Envios: React.FC = () => {
     const producto = productos.find((p) => p.id === productoId);
     return producto ? producto.nombre : "Producto desconocido";
   };
-
-  // --- LÓGICA DEL FORMULARIO ---
 
   const handleOpenCreate = () => {
     setFormData({
@@ -216,7 +206,6 @@ const Envios: React.FC = () => {
         formData.tipo_logistica === 2 && formData.puerto_entrega
           ? Number(formData.puerto_entrega)
           : undefined,
-      // Si formData.placa_vehiculo es null, se enviará undefined gracias a ||
       placa_vehiculo:
         formData.tipo_logistica === 1
           ? formData.placa_vehiculo || undefined
@@ -267,9 +256,6 @@ const Envios: React.FC = () => {
 
   return (
     <div className="p-6 max-w-[90rem] mx-auto">
-      {" "}
-      {/* Amplié un poco el max-width porque la tabla tiene más columnas */}
-      {/* HEADER Y ALERTA */}
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
@@ -289,8 +275,7 @@ const Envios: React.FC = () => {
           <span className="text-red-700">{errorMsg}</span>
         </div>
       )}
-      {/* TABLA DE ENVÍOS ACTUALIZADA */}
-      {/* TABLA DE ENVÍOS ACTUALIZADA */}
+
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse whitespace-nowrap text-sm">
@@ -312,14 +297,12 @@ const Envios: React.FC = () => {
             <tbody>
               {isLoading && envios.length === 0 ? (
                 <tr>
-                  {/* Actualizado a colSpan 10 */}
                   <td colSpan={10} className="p-8 text-center text-gray-500">
                     Cargando datos...
                   </td>
                 </tr>
               ) : envios.length === 0 ? (
                 <tr>
-                  {/* Actualizado a colSpan 10 */}
                   <td colSpan={10} className="p-8 text-center text-gray-500">
                     No hay envíos registrados.
                   </td>
@@ -424,7 +407,6 @@ const Envios: React.FC = () => {
             </div>
 
             <form onSubmit={handleSubmit} className="p-4 space-y-4">
-              {/* CLIENTE Y PRODUCTO */}
               <div className="grid grid-cols-2 gap-4 border-b border-gray-100 pb-4 mb-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -445,7 +427,6 @@ const Envios: React.FC = () => {
                       Seleccione un cliente...
                     </option>
                     {clientes.map((c) => {
-                      // Buscamos el tipo de documento para mostrarlo en el select
                       const tipoDoc = tiposDoc.find(
                         (t) => t.id === c.tipo_documento,
                       );
@@ -571,7 +552,6 @@ const Envios: React.FC = () => {
                 )}
               </div>
 
-              {/* RESTO DEL FORMULARIO */}
               <div className="grid grid-cols-2 gap-4">
                 {formData.tipo_logistica === 1 ? (
                   <div>

@@ -29,9 +29,8 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 # Configuración CORS
-CORS_ALLOW_ALL_ORIGINS = True  # Permite que React (localhost:5173) haga peticiones
+CORS_ALLOW_ALL_ORIGINS = True  
 
-# (Opcional pero recomendado para evitar errores con JWT)
 CORS_ALLOW_CREDENTIALS = True
 
 

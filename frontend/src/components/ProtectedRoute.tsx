@@ -12,7 +12,6 @@ const ProtectedRoute: React.FC = () => {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  // Si hay token, el <Outlet /> renderiza la página que solicitó (ej. /dashboard)
   return <Outlet />;
 };
 

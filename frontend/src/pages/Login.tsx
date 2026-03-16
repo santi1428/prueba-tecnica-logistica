@@ -69,7 +69,6 @@ const Login: React.FC = () => {
           </div>
         )}
 
-        {/* Formulario */}
         <form className="mt-8 space-y-6">
           <div className="space-y-4">
             {/* Input Usuario */}
@@ -88,9 +87,9 @@ const Login: React.FC = () => {
                   onChange={(e) => setUsername(e.target.value)}
                   className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                   placeholder="ej: admin"
-                  id="username" // <--- NUEVO
-                  name="username" // <--- NUEVO
-                  autoComplete="username" // <--- NUEVO: Ayuda a los gestores de
+                  id="username"
+                  name="username"
+                  autoComplete="username"
                 />
               </div>
             </div>
@@ -109,9 +108,9 @@ const Login: React.FC = () => {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  id="password" // <--- NUEVO
-                  name="password" // <--- NUEVO
-                  autoComplete="current-password" // <--- NUEVO: Indica que es contraseña
+                  id="password"
+                  name="password"
+                  autoComplete="current-password"
                   className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                   placeholder="••••••••"
                 />
@@ -120,8 +119,8 @@ const Login: React.FC = () => {
           </div>
 
           <button
-            type="submit" /* <-- 1. CAMBIA ESTO de "submit" a "button" */
-            onClick={handleSubmit} /* <-- 2. AGREGA ESTO AQUÍ */
+            type="submit"
+            onClick={handleSubmit}
             disabled={isLoading}
             className={`group relative w-full flex justify-center py-2.5 px-4 border border-transparent text-sm font-medium rounded-md text-white ${
               isLoading
@@ -131,7 +130,7 @@ const Login: React.FC = () => {
           >
             {isLoading ? "Autenticando..." : "Iniciar Sesión"}
           </button>
-          {/* NUEVO: Enlace de Registro */}
+
           <p className="mt-4 text-center text-sm text-gray-600">
             ¿No tienes una cuenta?{" "}
             <Link
