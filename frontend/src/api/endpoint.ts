@@ -19,12 +19,19 @@ export interface EnvioPayload {
   numero_flota?: string;
 }
 
+export interface RegisterPayload {
+  username: string;
+  email: string;
+  password?: string;
+}
+
 // Objeto principal con todas las peticiones a la API
 export const api = {
   // ----- AUTENTICACIÓN -----
   auth: {
     login: (data: LoginPayload) => apiClient.post("/auth/login/", data),
-    registro: (data: LoginPayload) => apiClient.post("/auth/registro/", data),
+    registro: (data: RegisterPayload) =>
+      apiClient.post("/auth/registro/", data),
   },
 
   // ----- LOGÍSTICA (CRUDs) -----

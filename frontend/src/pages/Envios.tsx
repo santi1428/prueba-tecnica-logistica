@@ -11,8 +11,14 @@ import type {
   TipoDocumento, // <-- Asegúrate de tener esto en tu model.ts
 } from "../interfaces/model";
 
+import { useSearchParams } from "react-router-dom";
+
 const Envios: React.FC = () => {
   const [envios, setEnvios] = useState<Envio[]>([]);
+
+  // 1. Lee el parámetro de la URL
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get("q")?.toLowerCase() || "";
 
   // ESTADOS PARA LOS CATÁLOGOS (Diccionarios de datos)
   const [clientes, setClientes] = useState<Cliente[]>([]);
@@ -79,6 +85,27 @@ const Envios: React.FC = () => {
       setIsLoading(false);
     }
   };
+
+  const enviosFiltrados = envios.filter((envio) => {
+    if (!query) return true; // Si no hay búsqueda, muestra todos
+
+    // A. ¿Coincide con el número de guía?
+    const matchGuia = envio.numero_guia.toLowerCase().includes(query);
+
+    // B. Buscar los datos del cliente asociado a este envío
+    const clienteObj = clientes.find((c) => c.id === envio.cliente);
+
+    // C. ¿Coincide con el nombre del cliente?
+    const matchNombreCliente =
+      clienteObj?.nombre.toLowerCase().includes(query) || false;
+
+    // D. ¿Coincide con el documento del cliente?
+    const matchDocCliente =
+      clienteObj?.documento.toLowerCase().includes(query) || false;
+
+    // Retorna true si CUALQUIERA de las condiciones se cumple
+    return matchGuia || matchNombreCliente || matchDocCliente;
+  });
 
   // --- FUNCIONES AUXILIARES PARA MOSTRAR TEXTOS EN LA TABLA EN LUGAR DE IDs ---
 
@@ -189,10 +216,15 @@ const Envios: React.FC = () => {
         formData.tipo_logistica === 2 && formData.puerto_entrega
           ? Number(formData.puerto_entrega)
           : undefined,
+      // Si formData.placa_vehiculo es null, se enviará undefined gracias a ||
       placa_vehiculo:
-        formData.tipo_logistica === 1 ? formData.placa_vehiculo : undefined,
+        formData.tipo_logistica === 1
+          ? formData.placa_vehiculo || undefined
+          : undefined,
       numero_flota:
-        formData.tipo_logistica === 2 ? formData.numero_flota : undefined,
+        formData.tipo_logistica === 2
+          ? formData.numero_flota || undefined
+          : undefined,
     };
 
     try {
@@ -293,7 +325,7 @@ const Envios: React.FC = () => {
                   </td>
                 </tr>
               ) : (
-                envios.map((envio) => (
+                enviosFiltrados.map((envio) => (
                   <tr
                     key={envio.id}
                     className="border-b border-gray-100 hover:bg-gray-50"

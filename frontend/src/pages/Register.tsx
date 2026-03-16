@@ -2,10 +2,8 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Truck, Lock, User, AlertCircle, Mail } from "lucide-react";
 import { api } from "../api/endpoint";
-import { useDocumentTitle } from "../hooks/useDocumentTitle";
 
 const Register: React.FC = () => {
-  useDocumentTitle("Registro");
   const navigate = useNavigate();
 
   // Estados del formulario
@@ -19,23 +17,44 @@ const Register: React.FC = () => {
 
   const handleRegister = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+
+    // Validaciones básicas de frontend en español
+    if (!username || !email || !password) {
+      setErrorMsg("Por favor, completa todos los campos.");
+      return;
+    }
+
+    if (password.length < 6) {
+      setErrorMsg("La contraseña debe tener al menos 6 caracteres.");
+      return;
+    }
+
     setIsLoading(true);
     setErrorMsg("");
 
     try {
-      // Llamamos al endpoint de registro que configuraste en Django
+      // Llamamos al endpoint de registro
       await api.auth.registro({ username, email, password });
 
       // Si el registro es exitoso, redirigimos al usuario al login
-      // (Opcional: Podrías hacer auto-login aquí llamando a api.auth.login)
       navigate("/login");
     } catch (error: any) {
       if (error.response && error.response.data) {
-        // Muestra el error específico de Django (ej. "Este usuario ya existe")
+        // Muestra el error específico de Django traducido o adaptado
         const djangoError = Object.values(error.response.data)[0] as string[];
-        setErrorMsg(djangoError[0] || "Error al registrar usuario.");
+        let mensaje = djangoError[0];
+
+        // Traducciones comunes de Django (Opcional, por si tu backend está en inglés)
+        if (mensaje.includes("already exists"))
+          mensaje = "Este nombre de usuario ya está en uso.";
+        if (mensaje.includes("valid email"))
+          mensaje = "Introduce una dirección de correo válida.";
+
+        setErrorMsg(
+          mensaje || "Error al registrar el usuario. Revisa los datos.",
+        );
       } else {
-        setErrorMsg("Ocurrió un error de conexión.");
+        setErrorMsg("Ocurrió un error de conexión con el servidor.");
       }
     } finally {
       setIsLoading(false);
@@ -60,7 +79,7 @@ const Register: React.FC = () => {
 
         {/* Mensaje de Error */}
         {errorMsg && (
-          <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-4 flex items-center">
+          <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-4 flex items-center shadow-sm">
             <AlertCircle className="h-5 w-5 text-red-500 mr-2 flex-shrink-0" />
             <p className="text-sm text-red-700">{errorMsg}</p>
           </div>
@@ -70,7 +89,10 @@ const Register: React.FC = () => {
           <div className="space-y-4">
             {/* Input Usuario */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="username"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Usuario
               </label>
               <div className="relative rounded-md shadow-sm">
@@ -78,9 +100,11 @@ const Register: React.FC = () => {
                   <User className="h-5 w-5 text-gray-400" />
                 </div>
                 <input
+                  id="username"
+                  name="username"
                   type="text"
                   required
-                  autoComplete="off"
+                  autoComplete="username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -91,7 +115,10 @@ const Register: React.FC = () => {
 
             {/* Input Email */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Correo Electrónico
               </label>
               <div className="relative rounded-md shadow-sm">
@@ -99,9 +126,11 @@ const Register: React.FC = () => {
                   <Mail className="h-5 w-5 text-gray-400" />
                 </div>
                 <input
+                  id="email"
+                  name="email"
                   type="email"
                   required
-                  autoComplete="off"
+                  autoComplete="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -112,7 +141,10 @@ const Register: React.FC = () => {
 
             {/* Input Contraseña */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Contraseña
               </label>
               <div className="relative rounded-md shadow-sm">
@@ -120,9 +152,11 @@ const Register: React.FC = () => {
                   <Lock className="h-5 w-5 text-gray-400" />
                 </div>
                 <input
+                  id="password"
+                  name="password"
                   type="password"
                   required
-                  autoComplete="off"
+                  autoComplete="new-password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -145,16 +179,16 @@ const Register: React.FC = () => {
                 : "bg-blue-600 hover:bg-blue-700"
             } transition-colors`}
           >
-            {isLoading ? "Registrando..." : "Registrarse"}
+            {isLoading ? "Registrando usuario..." : "Registrarse"}
           </button>
 
           <p className="mt-4 text-center text-sm text-gray-600">
             ¿Ya tienes una cuenta?{" "}
             <Link
               to="/login"
-              className="font-medium text-blue-600 hover:text-blue-500"
+              className="font-medium text-blue-600 hover:text-blue-500 transition-colors"
             >
-              Inicia sesión
+              Inicia sesión aquí
             </Link>
           </p>
         </div>

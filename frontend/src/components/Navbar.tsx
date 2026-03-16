@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { LogOut, Bell, Search, User } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom"; // <-- Agregado useLocation
+import { LogOut, Search, User, X } from "lucide-react"; // <-- Agregado X
 import { jwtDecode } from "jwt-decode";
 
 interface MyTokenPayload {
@@ -9,14 +9,12 @@ interface MyTokenPayload {
   exp: number;
 }
 
-// Función auxiliar fuera del componente para no re-crearla en cada render
 const obtenerNombreDesdeToken = (): string => {
   const token = localStorage.getItem("access_token");
-  if (!token) return "Usuario"; // Valor por defecto si no hay token
+  if (!token) return "Usuario";
 
   try {
     const decoded = jwtDecode<MyTokenPayload>(token);
-    // Retorna el username si existe, sino el ID
     return decoded.username ? decoded.username : `Usuario #${decoded.user_id}`;
   } catch (error) {
     console.error("Error al decodificar el token:", error);
@@ -26,12 +24,10 @@ const obtenerNombreDesdeToken = (): string => {
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
-
-  // 💡 EL CAMBIO CLAVE ESTÁ AQUÍ:
-  // Inicializamos el estado pasándole la función de evaluación.
-  // Esto hace que React lea el token y asigne el nombre en el PRIMER render,
-  // evitando el uso de useEffect y los renders en cascada (cascading renders).
+  const location = useLocation(); // <-- Para obtener la ruta actual
   const [userName] = useState<string>(obtenerNombreDesdeToken);
+
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleLogout = () => {
     localStorage.removeItem("access_token");
@@ -39,17 +35,54 @@ const Navbar: React.FC = () => {
     navigate("/login", { replace: true });
   };
 
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchTerm.trim() !== "") {
+      navigate(`/envios?q=${encodeURIComponent(searchTerm.trim())}`);
+    }
+  };
+
+  // --- NUEVA FUNCIÓN PARA LIMPIAR LA BÚSQUEDA ---
+  const handleClearSearch = () => {
+    setSearchTerm("");
+    // Redirige a la página actual pero sin los parámetros de búsqueda (?q=...)
+    // Esto resetea la tabla automáticamente si estabas en /envios
+    navigate(location.pathname);
+  };
+
   return (
     <header className="h-16 bg-white shadow-sm border-b border-gray-200 flex items-center justify-between px-6 z-10 ml-0 md:ml-64 transition-all duration-300 sticky top-0">
       {/* Buscador */}
-      <div className="flex items-center bg-gray-100 rounded-lg px-3 py-2 w-64 md:w-96 focus-within:ring-2 focus-within:ring-blue-500 transition-all">
-        <Search className="text-gray-500 mr-2" size={18} />
+      <form
+        onSubmit={handleSearch}
+        className="relative flex items-center bg-gray-100 rounded-lg px-3 py-2 w-64 md:w-96 focus-within:ring-2 focus-within:ring-blue-500 transition-all"
+      >
+        <button
+          type="submit"
+          className="text-gray-500 hover:text-blue-600 transition-colors"
+        >
+          <Search className="mr-2" size={18} />
+        </button>
         <input
           type="text"
-          placeholder="Buscar guías, clientes..."
-          className="bg-transparent border-none outline-none w-full text-sm text-gray-700 placeholder-gray-400"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Buscar guías..."
+          className="bg-transparent border-none outline-none w-full text-sm text-gray-700 placeholder-gray-400 pr-8"
         />
-      </div>
+
+        {/* BOTÓN DE RESETEO (Solo aparece si hay texto) */}
+        {searchTerm && (
+          <button
+            type="button"
+            onClick={handleClearSearch}
+            className="absolute right-3 text-gray-400 hover:text-red-500 transition-colors"
+            title="Limpiar búsqueda"
+          >
+            <X size={16} />
+          </button>
+        )}
+      </form>
 
       {/* Acciones de Usuario */}
       <div className="flex items-center gap-4">

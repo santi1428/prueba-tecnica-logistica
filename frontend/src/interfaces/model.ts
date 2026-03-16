@@ -1,14 +1,37 @@
 // src/interfaces/model.ts
 
+export interface TipoDocumento {
+  id: number;
+  nombre: string;
+  abreviatura: string | null;
+}
+
 export interface Cliente {
   id: number;
   nombre: string;
-  // Añade otros campos si los tienes
+  documento: string;
+  tipo_documento: number; // ID del tipo de documento asociado
+  correo_electronico?: string;
+  telefono?: string;
+  direccion?: string;
 }
 
 export interface Producto {
   id: number;
   nombre: string;
+  descripcion?: string;
+}
+
+export interface Bodega {
+  id: number;
+  nombre: string;
+  ubicacion: string;
+}
+
+export interface Puerto {
+  id: number;
+  nombre: string;
+  pais: string;
 }
 
 export interface Envio {
@@ -28,67 +51,9 @@ export interface Envio {
   puerto_entrega: number | null;
 }
 
-export interface Cliente {
-  id: number;
-  nombre: string;
-  documento: string; //
-}
-
-export interface Producto {
-  id: number;
-  nombre: string; // O el campo que uses en tu backend para mostrar el nombre
-}
-
-export interface Bodega {
-  id: number;
-  nombre: string;
-  // Añade otros campos si los tienes en la DB, por ejemplo: ubicacion: string;
-}
-
-// src/interfaces/model.ts
-export interface Cliente {
-  id: number;
-  nombre: string;
-  documento: string; // <--- CAMBIADO AQUÍ
-  correo_electronico?: string;
-  telefono?: string;
-  direccion?: string;
-}
-
-// src/interfaces/model.ts
-
-export interface TipoDocumento {
-  id: number;
-  nombre: string;
-  abreviatura: string | null;
-}
-
-export interface Cliente {
-  id: number;
-  nombre: string;
-  documento: string;
-  tipo_documento: number; // <--- NUEVO: El ID del tipo de documento asociado
-  correo_electronico?: string;
-  telefono?: string;
-  direccion?: string;
-}
-
-export interface Producto {
-  id: number;
-  nombre: string;
-  descripcion?: string; // Es opcional porque un tipo de producto podría no tener descripción
-}
-
-// src/interfaces/model.ts
-
-export interface Bodega {
-  id: number;
-  nombre: string;
-  ubicacion: string;
-}
-
-export interface Puerto {
-  id: number;
-  nombre: string;
-  pais: string; // <--- CAMBIADO DE ubicacion A pais
+// Payload para registro de usuarios (Opcional si prefieres dejarlo en endpoint.ts)
+export interface RegisterPayload {
+  username: string;
+  email: string;
+  password?: string;
 }
